@@ -1,0 +1,19 @@
+// tsconfig.json that is used to watch eveything
+{
+  "extends": "./tsconfig.options.json",
+  "files": [],
+  // When running tsc --build in the root directory,
+  // the TypeScript compiler accesses all packages defined
+  // in references and compiles them one by one in order
+  "references": [
+    // {
+    //   "path": "apps/client",
+    // },
+    {
+      "path": "apps/server",
+    },
+    {
+      "path": "packages/shared",
+    },
+  ],
+}
