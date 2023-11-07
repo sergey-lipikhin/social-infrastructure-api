@@ -20,12 +20,11 @@ async function create(user: Omit<IUser, 'id'>): Promise<User> {
   return User.create({ ...user });
 }
 
-function normalize({ id, email, name, surname }: User): IUserNormalized {
+function normalize({ id, email, name }: User): IUserNormalized {
   return {
     id,
     email,
     name,
-    surname,
   };
 }
 

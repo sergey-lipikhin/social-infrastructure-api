@@ -1,10 +1,10 @@
 import express from 'express';
 import cors, { CorsOptions } from 'cors';
+import morgan from 'morgan';
 import 'dotenv/config';
 import { initDb } from './utils/initDb';
 
 import { authRouter } from './routes/authRouter';
-import { kindergartenRouter } from './routes/kindergartenRouter';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 
 const app = express();
@@ -17,11 +17,12 @@ const corsOptons: CorsOptions = {
   credentials: true,
 };
 
+app.use(morgan('dev'));
+
 app.use(cors(corsOptons));
 app.use(express.json());
 
 app.use(authRouter);
-app.use('/kindergartens', kindergartenRouter);
 
 app.use(errorMiddleware);
 

@@ -25,7 +25,7 @@ async function send(
   html: string,
 ): Promise<void> {
   transporter.sendMail({
-    from: '"ЄДніпро" <sadok.develop@gmail.com>',
+    from: '"АДМІН" <sadok.develop@gmail.com>',
     to,
     subject,
     text: '',
@@ -38,7 +38,7 @@ async function sendActivationLink(email: string, token: string) {
 
   send(
     email,
-    'Активація акаунту на сайті "Дошкільнятко"',
+    'Активація акаунту на сайті "ОПТИМІЗАЦІЯ ПУНКТІВ НЕЗЛАМНОСТІ"',
     `<h1>Активація акаунту</h1>
     <a href="${link}">${link}</a>`,
   );

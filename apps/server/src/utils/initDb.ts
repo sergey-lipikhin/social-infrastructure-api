@@ -2,17 +2,16 @@ import { Sequelize } from 'sequelize-typescript';
 import 'dotenv/config';
 
 import { User } from '../models/User';
-import { Kindergarten } from '../models/Kindergarten';
 
 export const initDb = async(): Promise<Sequelize> => {
   const sequelize = new Sequelize({
-    dialect: 'mysql',
-    host: process.env.MYSQL_HOST,
-    database: process.env.MYSQL_NAME,
-    username: process.env.MYSQL_USERNAME,
-    password: process.env.MYSQL_PASSWORD,
+    dialect: 'postgres',
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
     logging: false,
-    models: [User, Kindergarten],
+    models: [User],
   });
 
   try {

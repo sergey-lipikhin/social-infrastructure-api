@@ -33,7 +33,7 @@ async function register(req: Request, res: Response) {
   const hash = await bcrypt.hash(password, 10);
 
   await userService.create({
-    email, password: hash, name, surname, activationToken });
+    email, password: hash, name, activationToken });
   await emailService.sendActivationLink(email, activationToken);
 
   res.sendStatus(200);
@@ -54,7 +54,7 @@ async function activate(req: Request, res: Response) {
   user.activationToken = null;
   await user.save();
 
-  res.send(user);
+  res.send(userService.normalize(user));
 }
 
 async function login(req: Request, res: Response) {
