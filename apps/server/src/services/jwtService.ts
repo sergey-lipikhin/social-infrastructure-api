@@ -6,7 +6,6 @@ function generateAccessToken(user: IUserNormalized): string {
   return jwt.sign(
     user,
     process.env.JWT_ACCESS_SECRET as string,
-    { expiresIn: '10s' },
   );
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable object-curly-newline */
 import { Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
@@ -13,6 +14,8 @@ import {
 } from '../validation/validationSchema';
 
 import { ApiError } from '../exceptions/ApiError';
+import { IUser } from '../types/IUser';
+import { User } from '../models/User';
 
 async function register(req: Request, res: Response) {
   const { email, password, name, surname } = req.body;
@@ -65,7 +68,7 @@ async function login(req: Request, res: Response) {
   const user = await userService.getByEmail(email);
 
   if (!user) {
-    throw ApiError.BadRequest('Користувач з такою поштою вже існує');
+    throw ApiError.BadRequest('Користувача з такою поштою не існує');
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -74,8 +77,30 @@ async function login(req: Request, res: Response) {
     throw ApiError.BadRequest('Невірний пароль');
   }
 
+  sendAuthentication(res, user);
+}
+
+async function refresh(req: Request, res: Response) {
+  const { accessToken } = req.body;
+
+  const userData = jwtService.validateAccessToken(accessToken);
+
+  if (!userData) {
+    throw ApiError.Unauthorized();
+  }
+
+  const user = await userService.getByEmail((userData as IUser).email);
+
+  if (!user) {
+    throw ApiError.Unauthorized();
+  }
+
+  sendAuthentication(res, user);
+}
+
+async function sendAuthentication(res: Response, user: User) {
   const userData = userService.normalize(user);
-  const accessToken = jwtService.generateAccessToken(userData);
+  const accessToken = await jwtService.generateAccessToken(userData);
 
   res.send({
     user: userData,
@@ -87,4 +112,5 @@ export const authController = {
   register,
   activate,
   login,
+  refresh,
 };
