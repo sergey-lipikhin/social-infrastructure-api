@@ -57,7 +57,7 @@ async function activate(req: Request, res: Response) {
   user.activationToken = null;
   await user.save();
 
-  res.send(userService.normalize(user));
+  sendAuthentication(res, user);
 }
 
 async function login(req: Request, res: Response) {
@@ -69,6 +69,13 @@ async function login(req: Request, res: Response) {
 
   if (!user) {
     throw ApiError.BadRequest('Користувача з такою поштою не існує');
+  }
+
+  if (user.activationToken) {
+    throw ApiError.BadRequest(
+      'Активуйте акаунт за посиланням, '
+      + 'яке було відправлено на пошту',
+    );
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
