@@ -1,7 +1,10 @@
 import { Sequelize } from 'sequelize-typescript';
 import 'dotenv/config';
 
+import { Rating } from '../models/Rating';
+import { Experiment } from '../models/Experiment';
 import { User } from '../models/User';
+import { Config } from '../models/Config';
 
 export const initDb = async(): Promise<Sequelize> => {
   const sequelize = new Sequelize({
@@ -11,7 +14,7 @@ export const initDb = async(): Promise<Sequelize> => {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     logging: false,
-    models: [User],
+    models: [User, Rating, Experiment, Config],
   });
 
   try {

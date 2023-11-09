@@ -6,6 +6,7 @@ import { initDb } from './utils/initDb';
 
 import { authRouter } from './routes/authRouter';
 import { errorMiddleware } from './middlewares/errorMiddleware';
+import { experimentRouter } from './routes/experimentRouter';
 
 const app = express();
 
@@ -21,8 +22,10 @@ app.use(morgan('dev'));
 
 app.use(cors(corsOptons));
 app.use(express.json());
+app.use('/', express.static('public'));
 
 app.use(authRouter);
+app.use('/experiment', experimentRouter);
 
 app.use(errorMiddleware);
 
