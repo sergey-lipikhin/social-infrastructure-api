@@ -29,7 +29,7 @@ export class Experiment extends Model {
 
   @AllowNull(false)
   @Column(DataType.DOUBLE)
-  declare timeThreshold: number;
+  declare iterationsThreshold: number;
 
   @AllowNull(false)
   @Column(DataType.BOOLEAN)

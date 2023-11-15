@@ -8,12 +8,16 @@ await sequelize.sync({ force: true });
 
 // Seed users
 const users: Array<{ email: string, password: string, name: string }> = [
-  { email: 'football3@ukr.net', password: '123456', name: 'Serhii' },
+  {
+    email: 'football3@ukr.net',
+    password: '$2a$12$gZuvaF3dSQzx6Mn6nLhfBuERSuVW7Ee3G3A.sDPEE/7/h61NU9xwC',
+    name: 'Serhii Lipikhin',
+  },
 ];
 
 const config = {
   name: 'main',
-  timeThreshold: 10,
+  iterationsThreshold: 10,
   hasEquipment: false,
   maxGenerations: 300,
   pCrossover: 0.7,

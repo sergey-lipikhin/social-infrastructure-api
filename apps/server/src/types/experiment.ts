@@ -17,15 +17,8 @@ export type Point = {
   equipment: Equipment;
 };
 
-export type Experiment = {
-  id: number;
-  date: string;
-  rate: number;
-  points: Point[];
-};
-
 export type ExperimentInput = {
-  timeThreshold: number,
+  iterationsThreshold: number,
   hasEquipment: boolean,
   initial: Array<{
     geometry: {

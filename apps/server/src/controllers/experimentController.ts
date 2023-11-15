@@ -13,7 +13,9 @@ async function makeExperiment(req: Request, res: Response) {
   const result: ExperimentOutput = initial.map(
     ({ attributes }) => ({
       ...attributes,
-      isIncluded: true,
+      isIncluded: attributes.typeOfPoint === 'business'
+        ? true
+        : Math.random() < 0.85,
       equipment: {
         starlink: true,
         generator: false,
@@ -28,20 +30,47 @@ async function makeExperiment(req: Request, res: Response) {
     throw ApiError.BadRequest('Встановлений конфіг алгоритму не існує');
   }
 
-  const experiment = await experimentService.create(
+  const { id } = await experimentService.create(
     { initial, ...params }, result,
   );
 
-  res.send(experiment);
+  const experiment = await experimentService.getById(id);
+
+  if (!experiment) {
+    throw ApiError.BadRequest('Посилка при збережені експерименту');
+  }
+
+  const { initial: skip, ...experimentNormalized } = experiment;
+
+  res.send({ ...experimentNormalized });
 }
 
 async function getAll(_req: Request, res: Response) {
   const experiments = await experimentService.getAll();
+  const experimentNormalized = experiments.map(({
+    initial,
+    ...rest
+  }) => ({ ...rest }));
 
-  res.send(experiments);
+  res.send(experimentNormalized);
+}
+
+async function remove(req: Request, res: Response) {
+  const id = Number(req.params.id);
+
+  const foundExperiment = await experimentService.getById(id);
+
+  if (!foundExperiment) {
+    throw ApiError.NotFound('Такого експерименту не існує');
+  }
+
+  await experimentService.remove(id);
+
+  res.sendStatus(200);
 }
 
 export const experimentController = {
   makeExperiment,
   getAll,
+  remove,
 };
